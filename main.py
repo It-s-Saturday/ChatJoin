@@ -1,4 +1,4 @@
-from asyncore import read
+
 from discord.ext import commands
 import discord
 from datetime import datetime, timezone
@@ -7,10 +7,11 @@ import os
 
 messages = []
 TOKEN, GUILD = '', ''
-bot = commands.Bot(command_prefix=';')
+client = None
+
 
 def write_to_log():
-    now = datetime.now() # current date and time
+    now = datetime.now()  # current date and time
     year = now.strftime("%Y")
     month = now.strftime("%m")
     day = now.strftime("%d")
@@ -35,6 +36,7 @@ def log(message, comment=''):
     messages.append(
         f'[{time}]\t-\t{f"[{comment}] " if comment else ""}{message}')
 
+
 def read_token():
     global TOKEN, GUILD
     try:
@@ -47,35 +49,25 @@ def read_token():
         raise Exception(f'Error opening {filename}')
 
 
-def connect():
-    try:
-        client = discord.Client()
-
-        @client.event
-        async def on_ready():
-            print(f'{client.user} has connected to Discord!')
-        client.run(TOKEN)
-        log(f'Successfully connected to Discord with User: {client.user}')
-
-    except:
-        raise Exception('Error in creating a discord client')
-
-
 if __name__ == '__main__':
     try:
         read_token()
-        connect()
+
+        client = discord.Client()
+        bot = commands.Bot(command_prefix='!')
 
         @bot.command(name='dm')
-        async def dm(carrier):
-            await carrier.create_dm()
-            message = 'Facts'
-            await carrier.dm_channel.send(message)
+        async def DM(ctx, message=None):
+            user = ctx.message.author
+            message=message or "Success"
+            await user.send(f"{message}")
+            log(f'{message} -> {user}')
 
         bot.run(TOKEN)
+
     except Exception as e:
         log(e, 'Run failed')
-        print(f'\n\ne\n\n')
+        print(f'\n\n{e}\n\n')
     finally:
         write_to_log()
         exit(0)

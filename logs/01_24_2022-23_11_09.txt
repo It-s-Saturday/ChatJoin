@@ -1,0 +1,2 @@
+[04:11:01]	-	Successfully read tokens from ./token
+[04:11:05]	-	Success -> jayway#7534
