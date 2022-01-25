@@ -1,3 +1,0 @@
-Successfully read tokens from ./token
-Successfully connected to Discord with User: ChatJoin#0232
-[2022-01-25 02:24:10.995329+00:00]	-	[Run failed] Event loop is closed
