@@ -62,7 +62,14 @@ if __name__ == '__main__':
             message=message or "Success"
             await user.send(f"{message}")
             log(f'{message} -> {user}')
-
+        """
+        - Add command to designate which channel the bot should watch (server-wide)
+        - Add listener onto said channel 
+        - On channel change, cycle through current x_members
+            - Cycle y_members in x_members.notify
+            -  
+        
+        """
         bot.run(TOKEN)
 
     except Exception as e:
