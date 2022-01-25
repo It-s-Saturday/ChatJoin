@@ -10,25 +10,30 @@ TOKEN, GUILD = '', ''
 bot = commands.Bot(command_prefix=';')
 
 def write_to_log():
-    now_utc = datetime.now(timezone.utc)
+    now = datetime.now() # current date and time
+    year = now.strftime("%Y")
+    month = now.strftime("%m")
+    day = now.strftime("%d")
+    time = now.strftime("%H:%M:%S")
+    date_time = now.strftime("%m_%d_%Y-%H_%M_%S")
     try:
         log_path = './logs/'
         if not os.path.exists(log_path):
             os.makedirs(log_path)
 
-        with open(f'{log_path}{now_utc}.txt', 'w') as f:
+        with open(f'{log_path}{date_time}.txt', 'w') as f:
             for message in messages:
                 f.write(f'{message}\n')
-        log(f'Successfully wrote to {now_utc}')
+        log(f'Successfully wrote to {date_time}')
     except:
-        raise Exception(f'Error writing to {now_utc}.txt')
+        raise Exception(f'Error writing to {log_path}{date_time}.txt')
 
 
 def log(message, comment=''):
     now = datetime.now(timezone.utc)
+    time = now.strftime("%H:%M:%S")
     messages.append(
-        f'[{now}]\t-\t[{comment}] {message}' if comment else message)
-
+        f'[{time}]\t-\t{f"[{comment}] " if comment else ""}{message}')
 
 def read_token():
     global TOKEN, GUILD
