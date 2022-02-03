@@ -1,0 +1,8 @@
+token
+notes
+a_c_p.sh
+
+mainer.py
+logs/
+*.swp
+Connect_Cluster.py
