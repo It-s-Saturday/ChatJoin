@@ -8,6 +8,7 @@ from mongo_files.DataObj import DataObj
 from mongo_files.Connect_Cluster import *
 from mongo_files.Dictionarify import dictionarify
 from mongo_files.User import *
+import asyncio
 
 messages = []
 TOKEN, GUILD = '', ''
@@ -57,15 +58,26 @@ if __name__ == '__main__':
     try:
         read_token()
 
-        client = discord.Client()
-        bot = commands.Bot(command_prefix='!')
+        intents = discord.Intents.all()
+        intents.members = True
 
-        @bot.command(name='dm')
-        async def DM(ctx, message=None):
-            user = ctx.message.author
-            message = message or "Success"
-            await user.send(f"{message}")
-            log(f'{message} -> {user}')
+        client = discord.Client()
+        print(f'{client} succesfully initialized')
+
+        bot = commands.Bot(command_prefix='!', intents=intents)
+
+        @client.event
+        async def on_voice_state_update(member, before, after):
+            print(member)
+            channel = after.channel  # Voice channel
+
+        # @bot.command(name='dm')
+        # async def DM(ctx, message=None):
+        #     member = ctx.message.author
+        #     print(type(member))
+        #     message = message or "Success"
+        #     await member.send(f"{message}")
+        #     log(f'{message} -> {member}')
 
         """
         - Add command to designate which channel the bot should watch (server-wide)
