@@ -75,10 +75,12 @@ if __name__ == '__main__':
         async def on_voice_state_update(member, before, after):
             print(member)
             print(before.channel, after.channel)
-            await member.send(content="hey there")
+            if not before.channel and after.channel:
+                await member.send(content="hey there")
 
         @bot.command(name='notifyme')
         async def DM(ctx):
+            
             member = ctx.message.author
 
             if ctx.message.mentions:
