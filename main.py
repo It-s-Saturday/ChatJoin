@@ -1,15 +1,17 @@
 
-from discord.ext import commands
-import discord
-from datetime import datetime, timezone
+import asyncio
 import os
 import time
-from mongo_files.DataObj import DataObj
+import traceback
+from datetime import datetime, timezone
+
+import discord
+from discord.ext import commands
+
 from mongo_files.Connect_Cluster import *
+from mongo_files.DataObj import DataObj
 from mongo_files.Dictionarify import dictionarify
 from mongo_files.User import *
-import asyncio
-import traceback
 
 messages = []
 TOKEN, GUILD = '', ''
@@ -63,44 +65,43 @@ if __name__ == '__main__':
         print(intents)
         intents.members = True
         print(intents.members)
-        # client = discord.Client(intents=intents)
- 
+
         bot = commands.Bot(command_prefix='!', intents=intents)
 
-        #client = discord.Client()
         print(f'{bot} succesfully initialized')
 
-        #bot = commands.Bot(command_prefix='!', intents=intents)
 
         @bot.event
         async def on_voice_state_update(member, before, after):
-            print("here thank god")
+            print(member)
             print(before.channel, after.channel)
-            channel = after.channel  # Voice channel
             await member.send(content="hey there")
 
-        @bot.command(name='dm')
-        async def DM(ctx, message=None):
+        @bot.command(name='notifyme')
+        async def DM(ctx):
             member = ctx.message.author
-            print(type(member))
-            message = message or "Success"
-            await member.send(f"{message}")
-            log(f'{message} -> {member}')
 
-        """
-        - Add command to designate which channel the bot should watch (server-wide)
-        - Add listener onto said channel 
-        - On join event, grab x_member
-            - Cycle y_members in x_member.notify
-            - Send dm to each y_member 
-        
-        - Add command in format !notifyme discorduser
-            - add invoker to discorduser's notify attribute
+            if ctx.message.mentions:
+                print(f'ctx.message = {ctx.message.content}')
+                target = ctx.message.mentions[0]
+                command, member_object = ctx.message.content.split()
+                member_id = int(member_object.strip('<@!>'))
+                print(f'add {member.id} to {member_id}')
 
-        1) User designates channel
-        2) Add listener to channel
-        3) on user join, cycle list and notify each
-        """
+                await member.send(content=f'Added you to {target}\'s list!')
+
+        @bot.command(name='removeme')
+        async def DM(ctx):
+            member = ctx.message.author
+
+            if ctx.message.mentions:
+                print(f'ctx.message = {ctx.message.content}')
+                target = ctx.message.mentions[0]
+                command, member_object = ctx.message.content.split()
+                member_id = int(member_object.strip('<@!>'))
+                print(f'remove {member.id} from {member_id}')
+
+                await member.send(content=f'Removed you from {target}\'s list!')
 
         bot.run(TOKEN)
 
