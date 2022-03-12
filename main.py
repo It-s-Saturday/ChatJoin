@@ -9,6 +9,7 @@ from mongo_files.Connect_Cluster import *
 from mongo_files.Dictionarify import dictionarify
 from mongo_files.User import *
 import asyncio
+import traceback
 
 messages = []
 TOKEN, GUILD = '', ''
@@ -58,26 +59,33 @@ if __name__ == '__main__':
     try:
         read_token()
 
-        intents = discord.Intents.all()
+        intents = discord.Intents.default()
+        print(intents)
         intents.members = True
-
-        client = discord.Client()
-        print(f'{client} succesfully initialized')
-
+        print(intents.members)
+        # client = discord.Client(intents=intents)
+ 
         bot = commands.Bot(command_prefix='!', intents=intents)
 
-        @client.event
-        async def on_voice_state_update(member, before, after):
-            print(member)
-            channel = after.channel  # Voice channel
+        #client = discord.Client()
+        print(f'{bot} succesfully initialized')
 
-        # @bot.command(name='dm')
-        # async def DM(ctx, message=None):
-        #     member = ctx.message.author
-        #     print(type(member))
-        #     message = message or "Success"
-        #     await member.send(f"{message}")
-        #     log(f'{message} -> {member}')
+        #bot = commands.Bot(command_prefix='!', intents=intents)
+
+        @bot.event
+        async def on_voice_state_update(member, before, after):
+            print("here thank god")
+            print(before.channel, after.channel)
+            channel = after.channel  # Voice channel
+            await member.send(content="hey there")
+
+        @bot.command(name='dm')
+        async def DM(ctx, message=None):
+            member = ctx.message.author
+            print(type(member))
+            message = message or "Success"
+            await member.send(f"{message}")
+            log(f'{message} -> {member}')
 
         """
         - Add command to designate which channel the bot should watch (server-wide)
@@ -98,7 +106,7 @@ if __name__ == '__main__':
 
     except Exception as e:
         log(e, 'Run failed')
-        print(f'\n\n{e}\n\n')
+        print(f'\n\n{traceback.format_exc()}\n\n')
     finally:
         write_to_log()
         exit(0)
