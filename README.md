@@ -1,7 +1,8 @@
 # ChatJoin
 ## A server utility that lets users know if someone joins
 
-![](UML.png)
+
+<img src="UML.png" width="700">
 
 ### Technologies
 - [Python 3.8+](https://www.python.org/)
