@@ -7,7 +7,7 @@ class Notify():
 
     def get_targets(self):
         ret = []
-        client = Connect_Cluster(self.server_id)
+        client = Connect_Cluster(str(self.server_id))
         collection = client.get_collection(str(self.target))
         for item in list(collection.find()):
             ret.append(item["user"])

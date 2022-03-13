@@ -64,6 +64,15 @@ class Connect_Cluster():
         self.insert_into_collection(str(target), {'user' : str(user)})
         print(f'Successfully inserted {user} into {target}')
 
+    def remove_user_from_target(self, user, target):
+        collection = self.get_collection(target)
+        if collection is None:
+            print(f'{user} not in {target}!')
+            return
+        
+        collection.delete_one({'user': str(user)})
+        print(f'Successfully delete {user} from {target}')
+
 if __name__ == '__main__':
     client = Connect_Cluster()
     client.insert_into_collection('380525127030538254', {'user':'760661855374147624'})

@@ -75,45 +75,47 @@ if __name__ == '__main__':
 
         @bot.event
         async def on_voice_state_update(member, before, after):
-            print(member)
             print(before.channel, after.channel)
             if not before.channel and after.channel:
-                member_id = member.strip('<@!>')
-                instance = Notify(member_id, member.guild.id)
+                instance = Notify(member.id, member.guild.id)
                 for user in instance.get_targets():
-                    await user.send(content=f'{member} joined a channel!')
-                await member.send(content="hey there")
+                    user_object = await bot.fetch_user(int(user))
+                    await user_object.send(content=f'{member} joined a channel!')
+
 
         @bot.command(name='notifyme')
         async def DM(ctx):
-            member = ctx.message.author
+            caller = ctx.message.author
 
             if ctx.message.mentions:
                 print(f'ctx.message = {ctx.message.content}')
                 target = ctx.message.mentions[0]
-                command, member_object = ctx.message.content.split()
-                member_id = int(member_object.strip('<@!>'))
-                print(f'add {member.id} to {member_id}')
+                command, target_object = ctx.message.content.split()
+                target_id = int(target_object.strip('<@!>'))
+                print(f'add {caller.id} to {target_id}')
 
                 client = Connect_Cluster(str(ctx.message.guild.id))
-                client.add_user_to_target(member.id, member_id)
+                client.add_user_to_target(caller.id, target_id)
                 client.cluster.close()
 
-                await member.send(content=f'Added you to {target}\'s list!')
-                print("complete")
+                await caller.send(content=f'Added you to {target}\'s list!')
 
         @bot.command(name='removeme')
         async def DM(ctx):
-            member = ctx.message.author
+            caller = ctx.message.author
 
             if ctx.message.mentions:
                 print(f'ctx.message = {ctx.message.content}')
                 target = ctx.message.mentions[0]
-                command, member_object = ctx.message.content.split()
-                member_id = int(member_object.strip('<@!>'))
-                print(f'remove {member.id} from {member_id}')
+                command, target_object = ctx.message.content.split()
+                target_id = int(target_object.strip('<@!>'))
+                print(f'remove {caller.id} from {target_id}')
 
-                await member.send(content=f'Removed you from {target}\'s list!')
+                client = Connect_Cluster(str(ctx.message.guild.id))
+                client.remove_user_from_target(str(caller.id), str(target_id))
+                client.cluster.close()
+
+                await caller.send(content=f'Removed you from {target}\'s list!')
 
         bot.run(TOKEN)
 
