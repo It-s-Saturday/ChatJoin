@@ -80,7 +80,6 @@ if __name__ == '__main__':
 
         @bot.command(name='notifyme')
         async def DM(ctx):
-            
             member = ctx.message.author
 
             if ctx.message.mentions:
