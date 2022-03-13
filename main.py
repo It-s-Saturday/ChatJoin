@@ -15,6 +15,7 @@ from mongo_files.Connect_Cluster import *
 from mongo_files.DataObj import DataObj
 from mongo_files.Dictionarify import dictionarify
 from mongo_files.User import *
+from notify import Notify
 
 messages = []
 TOKEN, GUILD = '', ''
@@ -77,6 +78,10 @@ if __name__ == '__main__':
             print(member)
             print(before.channel, after.channel)
             if not before.channel and after.channel:
+                member_id = member.strip('<@!>')
+                instance = Notify(member_id, member.guild.id)
+                for user in instance.get_targets():
+                    await user.send(content=f'{member} joined a channel!')
                 await member.send(content="hey there")
 
         @bot.command(name='notifyme')
@@ -115,6 +120,7 @@ if __name__ == '__main__':
     except Exception as e:
         log(e, 'Run failed')
         print(f'\n\n{traceback.format_exc()}\n\n')
+
     finally:
         write_to_log()
         exit(0)
