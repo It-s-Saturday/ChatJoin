@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Connect_Cluster():
-    def __init__(self, database_name='880145727395885117'):
+    def __init__(self, database_name):
         self.database_name = database_name or datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
 
         cluster_address_file = '/home/jayway/chatjoin/mongo_files/clusteraddress'
@@ -72,10 +72,3 @@ class Connect_Cluster():
 
         collection.delete_one({'user': str(user)})
         print(f'Successfully delete {user} from {target}')
-
-
-if __name__ == '__main__':
-    client = Connect_Cluster()
-    client.insert_into_collection(
-        '380525127030538254', {'user': '760661855374147624'})
-    print('OK')
