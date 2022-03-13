@@ -1,5 +1,3 @@
-
-
 from mongo_files.Connect_Cluster import Connect_Cluster
 
 class Notify():
@@ -8,8 +6,9 @@ class Notify():
         self.server_id = server_id
 
     def get_targets(self):
+        ret = []
         client = Connect_Cluster(self.server_id)
-        collection = client.get_collection(self.target)
-        print(collection)    
-    
-
+        collection = client.get_collection(str(self.target))
+        for item in list(collection.find()):
+            ret.append(item["user"])
+        return ret
