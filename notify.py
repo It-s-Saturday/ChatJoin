@@ -1,5 +1,6 @@
 from mongo_files.Connect_Cluster import Connect_Cluster
 
+
 class Notify():
     def __init__(self, target, server_id=None) -> None:
         self.target = target

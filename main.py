@@ -1,25 +1,17 @@
-
-import asyncio
-from http import server
-from multiprocessing.connection import Client
 import os
-import time
 import traceback
-import mongo_files.Connect_Cluster
 from datetime import datetime, timezone
 
 import discord
 from discord.ext import commands
 
 from mongo_files.Connect_Cluster import *
-from mongo_files.DataObj import DataObj
-from mongo_files.Dictionarify import dictionarify
-from mongo_files.User import *
 from notify import Notify
 
 messages = []
 TOKEN, GUILD = '', ''
 client = None
+
 
 def write_to_log():
     now = datetime.now()  # current date and time
@@ -81,7 +73,6 @@ if __name__ == '__main__':
                 for user in instance.get_targets():
                     user_object = await bot.fetch_user(int(user))
                     await user_object.send(content=f'{member} joined a channel!')
-
 
         @bot.command(name='notifyme')
         async def DM(ctx):
