@@ -3,12 +3,15 @@ from datetime import datetime
 
 
 class Connect_Cluster():
-    def __init__(self, database_name):
+    def __init__(self, database_name='880145727395885117'):
         self.database_name = database_name or datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
 
+        cluster_address_file = '/home/jayway/chatjoin/mongo_files/clusteraddress'
+
+        with open(cluster_address_file) as f:
+            cluster_address = f.readlines()[0]
         # Instantiate cluster
-        self.cluster = pymongo.MongoClient(
-            "mongodb+srv://jayway:bvpdxjFFdR8Jsxkx@cluster0.6lkjo.mongodb.net/Cluster0?retryWrites=true&w=majority")
+        self.cluster = pymongo.MongoClient(cluster_address)
 
         # Instantiate database based on name
         self.db = self.cluster[database_name]
@@ -31,6 +34,9 @@ class Connect_Cluster():
 
     def insert_into_collection(self, collection_name: str, document: list):
         """Retrieves collection; if not exist, then create. Insert list of dictionaries into <collection_name>"""
+        if self.get_collection(collection_name) is None:
+            self.create_collection_for(collection_name)
+
         x = self.get_collection(collection_name)
 
         if x is None:
@@ -42,14 +48,24 @@ class Connect_Cluster():
             print(f'Inserted {document} in {collection_name}\n\n')
         else:
             print(f'{document} already exists in {collection_name}!')
-    
+
     def clear_collection(self, name):
         """Clears collection with name <name>
         """
         collection = self.db[name]
-        
+
         deletion = collection.delete_many({})
         if deletion.deleted_count == 0:
             print(f'Noting to delete from {name}')
         else:
             print(f'{deletion.deleted_count} documents deleted from {name}')
+
+    def add_user_to_target(self, user, target):
+        self.insert_into_collection(str(target), {'user' : str(user)})
+        print(f'Successfully inserted {user} into {target}')
+
+if __name__ == '__main__':
+    client = Connect_Cluster()
+    client.insert_into_collection('380525127030538254', {'user':'760661855374147624'})
+    print('OK')
+        

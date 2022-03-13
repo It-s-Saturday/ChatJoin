@@ -6,3 +6,4 @@ mainer.py
 logs/
 *.swp
 Connect_Cluster.py
+clusteraddress

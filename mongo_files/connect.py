@@ -1,3 +1,4 @@
+from mimetypes import init
 import pymongo
 
 from Connect_Cluster import Connect_Cluster
@@ -25,13 +26,15 @@ def populate(client: Connect_Cluster, state_list, people_list):
         print(f'{curr_collection}')
         # client.clear_collection(people_list[i])
 
-def main():
-    database_name = 'LeagueMeAlone'
-    client = Connect_Cluster(f'{database_name}')
-    for person in server_people:
-        client.create_collection_for(person)
+def initialize(serverid: str):
+    if serverid:
+        client = Connect_Cluster(serverid)
+    else:
+        client = Connect_Cluster()
+    return client
 
-    populate(client, states, server_people)
+def main():
+    client = initialize()
 
 
 if __name__ == '__main__':
