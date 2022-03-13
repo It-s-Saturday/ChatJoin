@@ -9,5 +9,7 @@ class Notify():
 
     def get_targets(self):
         client = Connect_Cluster(self.server_id)
-        client.add_user_to_target
+        collection = client.get_collection(self.target)
+        print(collection)    
+    
 
