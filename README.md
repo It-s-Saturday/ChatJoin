@@ -4,9 +4,9 @@
 ![](UML.png)
 
 ### Technologies
-- Python 3.8.x
-- discord.py
-- MongoDB
+- [Python 3.8+](https://www.python.org/)
+- [discord.py](https://discordpy.readthedocs.io/en/latest/index.html)
+- [MongoDB](https://www.mongodb.com/)
 
 ### Concepts
 - Object-oriented design
