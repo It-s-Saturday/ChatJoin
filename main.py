@@ -1,8 +1,11 @@
 
 import asyncio
+from http import server
+from multiprocessing.connection import Client
 import os
 import time
 import traceback
+import mongo_files.Connect_Cluster
 from datetime import datetime, timezone
 
 import discord
@@ -16,7 +19,6 @@ from mongo_files.User import *
 messages = []
 TOKEN, GUILD = '', ''
 client = None
-
 
 def write_to_log():
     now = datetime.now()  # current date and time
@@ -70,7 +72,6 @@ if __name__ == '__main__':
 
         print(f'{bot} succesfully initialized')
 
-
         @bot.event
         async def on_voice_state_update(member, before, after):
             print(member)
@@ -90,7 +91,12 @@ if __name__ == '__main__':
                 member_id = int(member_object.strip('<@!>'))
                 print(f'add {member.id} to {member_id}')
 
+                client = Connect_Cluster(str(ctx.message.guild.id))
+                client.add_user_to_target(member.id, member_id)
+                client.cluster.close()
+
                 await member.send(content=f'Added you to {target}\'s list!')
+                print("complete")
 
         @bot.command(name='removeme')
         async def DM(ctx):
