@@ -70,9 +70,10 @@ if __name__ == '__main__':
             print(before.channel, after.channel)
             if not before.channel and after.channel:
                 instance = Notify(member.id, member.guild.id)
+                server = member.guild.name
                 for user in instance.get_targets():
                     user_object = await bot.fetch_user(int(user))
-                    await user_object.send(content=f'{member} joined {after.channel}!')
+                    await user_object.send(content=f'{member} joined channel {after.channel} in server {server}!')
 
         @bot.command(name='notifyme')
         async def DM(ctx):
