@@ -72,7 +72,7 @@ if __name__ == '__main__':
                 instance = Notify(member.id, member.guild.id)
                 for user in instance.get_targets():
                     user_object = await bot.fetch_user(int(user))
-                    await user_object.send(content=f'{member} joined a channel!')
+                    await user_object.send(content=f'{member} joined {after.channel}!')
 
         @bot.command(name='notifyme')
         async def DM(ctx):
