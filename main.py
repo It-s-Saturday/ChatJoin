@@ -77,15 +77,23 @@ if __name__ == '__main__':
         @bot.command(name='notifyme')
         async def DM(ctx):
             caller = ctx.message.author
-
+    
             if ctx.message.mentions:
                 print(f'ctx.message = {ctx.message.content}')
                 target = ctx.message.mentions[0]
-                command, target_object = ctx.message.content.split()
+                message_content = ctx.message.content.split()
+
+                # if message_content > 2 then use third arg as guild_id
+                if len(message_content) == 3:
+                    command, target_object, guild = message_content
+                elif len(message_content) == 2:
+                    command, target_object = message_content
+                    guild = str(ctx.message.guild.id)
+
                 target_id = int(target_object.strip('<@!>'))
                 print(f'add {caller.id} to {target_id}')
 
-                client = Connect_Cluster(str(ctx.message.guild.id))
+                client = Connect_Cluster(guild)
                 client.add_user_to_target(caller.id, target_id)
                 client.cluster.close()
 
