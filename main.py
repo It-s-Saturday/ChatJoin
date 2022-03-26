@@ -69,7 +69,6 @@ if __name__ == '__main__':
         async def on_voice_state_update(member, before, after):
             print(before.channel, after.channel)
             if not before.channel and after.channel:
-                print(type(after.channel.members[0].id))
                 member_ids = {member.id for member in after.channel.members} # a set containing the ids of everyone in the channel
                 instance = Notify(member.id, member.guild.id)
                 server_name = member.guild.name
