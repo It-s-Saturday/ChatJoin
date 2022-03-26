@@ -69,11 +69,17 @@ if __name__ == '__main__':
         async def on_voice_state_update(member, before, after):
             print(before.channel, after.channel)
             if not before.channel and after.channel:
+                print(type(after.channel.members[0].id))
+                member_ids = {member.id for member in after.channel.members} # a set containing the ids of everyone in the channel
                 instance = Notify(member.id, member.guild.id)
-                server = member.guild.name
+                server_name = member.guild.name
+                channel_name = after.channel
                 for user in instance.get_targets():
+                    # if user is already in channel, then continue
+                    if int(user) in member_ids:
+                        continue
                     user_object = await bot.fetch_user(int(user))
-                    await user_object.send(content=f'{member} joined channel {after.channel} in server {server}!')
+                    await user_object.send(content=f'{member} joined channel {channel_name} in server {server_name}!')
 
         @bot.command(name='notifyme')
         async def DM(ctx):
